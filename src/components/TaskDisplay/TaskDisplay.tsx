@@ -1,27 +1,36 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { todos, Todo } from "../../data/todos";
 import { ButtonDelete } from "../Button/Button.style";
 import { DisplayContainer, DisplayTaskBox, LineThroughText, CheckboxInput } from "./TaskDisplay.style";
 
-function TaskDisplay() {
+interface TaskDisplayProps {
+    newTodoList: Todo[];
+    onFormSubmit: (updatedTodoList: Todo[]) => void;
+}
+
+const TaskDisplay: React.FC<TaskDisplayProps> = ({ newTodoList, onFormSubmit }) => {
 
     const [todoList, setTodoList] = useState<Todo[]>(todos);
 
+    useEffect(() => {
+        setTodoList(newTodoList);
+    }, [newTodoList]);
+
     const handleChangeCheckBox = (taskId: number) => {
-        const updatedToDoList = todoList.map(todo => {
+        const updatedCompletedStatus = todoList.map(todo => {
             if (todo.id === taskId) {
                 return {... todo, completed: !todo.completed};
             }
             return todo;
         });
-        setTodoList(updatedToDoList);
+        setTodoList(updatedCompletedStatus);
     }
 
     const handleDeleteTask = (taskId: number) => {
         //includes all todos except the one deleted
-        const deleteToDo = todoList.filter(todo => todo.id !== taskId);
-        setTodoList(deleteToDo);
-        console.log("handledelete", todoList);
+        const deleteToDoNewList = todoList.filter(todo => todo.id !== taskId);
+        setTodoList(deleteToDoNewList);
+        onFormSubmit(deleteToDoNewList);
     }
 
     return (

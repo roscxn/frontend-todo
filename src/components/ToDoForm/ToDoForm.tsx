@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Todo, todos } from "../../data/todos";
 import { ButtonSubmitTask } from "../Button/Button.style";
 import { FormContainer, TextBox } from "./ToDoForm.style";
 import { ErrorSubmitMessage, SuccessSubmitMessage } from "./ToDoForm.style";
 
-// interface ToDoFormProps {
-//     updateTodoList: (newTodoList: Todo[]) => void;
-// }
+interface FormProps {
+    newTodoList: Todo[];
+    onFormSubmit: (updatedTodoList: Todo[]) => void;
+}
 
-function ToDoForm() {
+const ToDoForm: React.FC<FormProps> = ({ newTodoList, onFormSubmit }) => {
 
     const [formData, setFormData] = useState<Todo>({
         id: 0,
@@ -19,6 +20,10 @@ function ToDoForm() {
     const [submitMessage, setSubmitMessage] = useState('');
     const [addSuccess, setAddSuccess] = useState(false);
     const [todoList, setTodoList] = useState<Todo[]>(todos);
+
+    useEffect(() => {
+        setTodoList(newTodoList);
+    }, [newTodoList]);
 
     const handleTaskInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -46,8 +51,12 @@ function ToDoForm() {
                 task: formData.task,
                 completed: false,
             };
-            console.log("new to do todoformtsx", newTodo);
-            // updateTodoList(prevTodoList => [ ... prevTodoList, newTodo ]);
+
+            console.log("newtodo", newTodo);
+
+            const updatedTodoList = [... todoList, newTodo];
+            setTodoList(updatedTodoList);
+            onFormSubmit(updatedTodoList);
             setFormData({ id: 0, task: '', completed: false });
             setSubmitMessage('New task added successfully.');
             setAddSuccess(true);

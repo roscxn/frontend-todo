@@ -4,21 +4,20 @@ import ToDoForm from './components/ToDoForm/ToDoForm';
 import TaskDisplay from './components/TaskDisplay/TaskDisplay';
 import { WebTheme, ToDoContainerBackground } from './components/AppTheme/AppTheme.style';
 
-
 function App() {
 
-  const [todoList, setTodoList] = useState<Todo[]>(todos);
+  const [newTodoList, setNewTodoList] = useState<Todo[]>(todos);
 
-  const updateTodoList = (newTodoList: Todo[]) => {
-    setTodoList(newTodoList);
-  }
-  
+  const handleListRefresh = (updatedTodoList: Todo[]) => {
+    setNewTodoList(updatedTodoList);
+  };
+
   return (
     <WebTheme>
       <ToDoContainerBackground>
       <h1>Todo App</h1>
-        <ToDoForm />
-        <TaskDisplay />
+        <ToDoForm newTodoList={newTodoList} onFormSubmit={handleListRefresh}/>
+        <TaskDisplay newTodoList={newTodoList} onFormSubmit={handleListRefresh}/>
       </ToDoContainerBackground>
     </WebTheme>
   )
