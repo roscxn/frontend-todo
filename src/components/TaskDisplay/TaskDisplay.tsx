@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { todos, Todo } from "../../data/todos";
 import { ButtonDelete } from "../Button/Button.style";
-import { DisplayContainer, DisplayTaskBox, LineThroughText } from "./TaskDisplay.style";
-import { CheckboxInput } from "../Checkbox/Checkbox.style";
+import { DisplayContainer, DisplayTaskBox, LineThroughText, CheckboxInput } from "./TaskDisplay.style";
 
 function TaskDisplay() {
 

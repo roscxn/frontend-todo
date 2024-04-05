@@ -16,6 +16,7 @@ function App() {
   return (
     <WebTheme>
       <ToDoContainerBackground>
+      <h1>Todo App</h1>
         <ToDoForm />
         <TaskDisplay />
       </ToDoContainerBackground>
