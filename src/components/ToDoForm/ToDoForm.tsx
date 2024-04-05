@@ -1,41 +1,54 @@
 import React, { useState } from "react";
+import { Todo, todos } from "../../data/todos";
 import { ButtonSubmitTask } from "../Button/Button.style";
 import { FormContainer, TextBox } from "./ToDoForm.style";
 import { ErrorSubmitMessage, SuccessSubmitMessage } from "./ToDoForm.style";
 
-interface TaskDetails {
-    task: string
-    completed?: boolean
-    createdAt?: Date
-}
+// interface ToDoFormProps {
+//     updateTodoList: (newTodoList: Todo[]) => void;
+// }
 
 function ToDoForm() {
 
-    const [formData, setFormData] = useState<TaskDetails>({
+    const [formData, setFormData] = useState<Todo>({
+        id: 0,
         task: '', 
         completed: false,
-        createdAt: new Date()
     }); 
 
     const [submitMessage, setSubmitMessage] = useState('');
     const [addSuccess, setAddSuccess] = useState(false);
+    const [todoList, setTodoList] = useState<Todo[]>(todos);
 
     const handleTaskInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setSubmitMessage('');
-        setFormData(prevState => ({ ...prevState, [name]: value }));
-    }
-
+        // Custom validation to ensure at least one alphabet character
+        if (value.length > 0 && !/[a-zA-Z]/.test(value)) {
+            // Display error message if validation fails
+            setSubmitMessage('Task must contain at least one alphabet character.');
+        } else {
+            // Update the form data if validation passes
+            setFormData(prevState => ({ ...prevState, [name]: value }));
+        }
+    };
+    
     const handleAddTask = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const trimmedValue = formData.task.trim();
         if (trimmedValue === '' || trimmedValue.length < 3) {
-            setFormData({ task: '' });
-            setSubmitMessage('Task length must be at least 3 characters.');
+            setFormData({ id: 0, task: '', completed: false });
+            setSubmitMessage('Task length must be at least 3 characters long.');
             setAddSuccess(false);
         } else {
-            console.log("Form submitted", formData);
-            setFormData({ task: '' });
+            const newTodo: Todo = {
+                id: todoList.length + 1,
+                task: formData.task,
+                completed: false,
+            };
+            console.log("new to do todoformtsx", newTodo);
+            // updateTodoList(prevTodoList => [ ... prevTodoList, newTodo ]);
+            setFormData({ id: 0, task: '', completed: false });
             setSubmitMessage('New task added successfully.');
             setAddSuccess(true);
         }

@@ -15,3 +15,7 @@ export const DisplayTaskBox = styled.div`
     height: 50px;
     margin-top: 30px;
 `
+
+export const LineThroughText = styled.span`
+    text-decoration: line-through;
+`
