@@ -27,7 +27,6 @@ const TaskDisplay: React.FC<TaskDisplayProps> = ({ newTodoList, onFormSubmit }) 
     }
 
     const handleDeleteTask = (taskId: number) => {
-        //includes all todos except the one deleted
         const deleteToDoNewList = todoList.filter(todo => todo.id !== taskId);
         setTodoList(deleteToDoNewList);
         onFormSubmit(deleteToDoNewList);
