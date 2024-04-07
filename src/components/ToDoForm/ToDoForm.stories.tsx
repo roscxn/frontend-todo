@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { action } from '@storybook/addon-actions'
 import { Meta } from '@storybook/react';
 import { FormContainer, TextBox, SuccessSubmitMessage, ErrorSubmitMessage } from './ToDoForm.style';
@@ -11,11 +11,23 @@ export default {
 
 export const DisplayTodo= () => {
 
+  const [todo, setTodo] = useState('');
   const [addSuccess, setAddSuccess] = useState(false);
 
   const handleAdd = (event: any) => {
     event.preventDefault();
-    setAddSuccess(true);
+    if (todo.length < 3 || !/[a-zA-Z]/.test(todo)) {
+      setAddSuccess(false);
+      action('Error in adding task')(todo)
+    } else {
+      setAddSuccess(true);
+      action('Task added')(todo)
+      setTodo('')
+    }
+  }
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTodo(event.target.value);
   }
 
   return (
@@ -24,7 +36,9 @@ export const DisplayTodo= () => {
             type="text"
             placeholder="Add your new todo"
             name="task"
+            value={todo}
             minLength={3}
+            onChange={handleChange}
             required
         />
           <ButtonSubmitTask onClick={(event) => { 

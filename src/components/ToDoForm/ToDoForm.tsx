@@ -28,12 +28,10 @@ const ToDoForm: React.FC<FormProps> = ({ newTodoList, onFormSubmit }) => {
     const handleTaskInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setSubmitMessage('');
-        // Custom validation to ensure at least one alphabet character
         if (value.length > 0 && !/[a-zA-Z]/.test(value)) {
-            // Display error message if validation fails
+            setAddSuccess(false);
             setSubmitMessage('Task must contain at least one alphabet character.');
         } else {
-            // Update the form data if validation passes
             setFormData(prevState => ({ ...prevState, [name]: value }));
         }
     };
@@ -46,13 +44,24 @@ const ToDoForm: React.FC<FormProps> = ({ newTodoList, onFormSubmit }) => {
             setSubmitMessage('Task length must be at least 3 characters long.');
             setAddSuccess(false);
         } else {
+            
+            const findMaxId = (todos: Todo[]): number => {
+                let maxId = 0;
+                for (const todo of todos) {
+                    if (todo.id > maxId) {
+                        maxId = todo.id;
+                    }
+                }
+                return maxId;
+            };
+            
+            const maxId = findMaxId(todoList); 
+            
             const newTodo: Todo = {
-                id: todoList.length + 1,
+                id: maxId + 1, 
                 task: formData.task,
                 completed: false,
             };
-
-            console.log("newtodo", newTodo);
 
             const updatedTodoList = [... todoList, newTodo];
             setTodoList(updatedTodoList);
